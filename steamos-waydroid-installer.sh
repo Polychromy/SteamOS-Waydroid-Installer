@@ -23,14 +23,10 @@ FREE_HOME=$(df /home --output=avail | tail -n1)
 FREE_VAR=$(df /var --output=avail | tail -n1)
 
 # android TV builds
-#ANDROID13_TV_IMG=https://github.com/supechicken/waydroid-androidtv-build/releases/download/20250913/lineage-20.0-20250913-UNOFFICIAL-WayDroidATV_x86_64.zip
-
-ANDROID13_TV_IMG=https://github.com/supechicken/waydroid-androidtv-build/releases/download/20250811/lineage-20.0-20250811-UNOFFICIAL-WayDroidATV_x86_64.zip
+ANDROID13_TV_IMG=https://github.com/ryanrudolfoba/SteamOS-Waydroid-Installer/releases/download/Android13TV/lineage-20-20250117-UNOFFICIAL-10MinuteSteamDeckGamer-WaydroidATV.zip
 
 # android TV hash
-#ANDROID13_TV_IMG_HASH=309e0692fed0ea5d6b130858553138521d2e8902754db93a2b5a3ca68ecb28e9
-
-ANDROID13_TV_IMG_HASH=0c6cb5f3ccc7edab105d800363c2fe6b457f77f793f04e3fddc6175c0665a2d4
+ANDROID13_TV_IMG_HASH=2ac5d660c3e32b8298f5c12c93b1821bc7ccefbd7cfbf5fee862e169aa744f4c
 
 echo script version: $SCRIPT_VERSION_SHA
 
@@ -104,7 +100,7 @@ then
 		echo -e "$current_password\n" | sudo -S pacman -U --noconfirm binder_linux-dkms*.zst &>> $LOGFILE && \
 		echo -e "$current_password\n" | sudo -S modprobe binder_linux device=binder,hwbinder,vndbinder &>> $LOGFILE
 
-	if [ $? -eq 0 ]	
+	if [ $? -eq 0 ]
 	then
 		echo No errors encountered building the binder module. Binder module has been loaded.
 	else
@@ -241,7 +237,7 @@ else
 		--column="Description - Read this carefully!"\
 		TRUE A13_GAPPS "Download official Android 13 image with Google Play Store."\
 		FALSE A13_NO_GAPPS "Download official Android 13 image without Google Play Store."\
-		FALSE TV13_GAPPS "Download unofficial Android 13 TV image with Google Play Store - thanks SupeChicken666 for the image!" \
+		FALSE TV13_NO_GAPPS "Download unofficial Android 13 TV image without Google Play Store - thanks SupeChicken666 for the build instructions!" \
 		FALSE EXIT "***** Exit this script *****")
 
 		if [ $? -eq 1 ] || [ "$Choice" == "EXIT" ]
@@ -261,7 +257,7 @@ else
 			echo -e "$current_password\n" | sudo -S waydroid init
 			check_waydroid_init
 
-		elif [ "$Choice" == "TV13_GAPPS" ]
+		elif [ "$Choice" == "TV13_NO_GAPPS" ]
 		then
 			prepare_custom_image_location
 			download_image $ANDROID13_TV_IMG $ANDROID13_TV_IMG_HASH ~/waydroid/custom/android13tv "Android 13 TV"
@@ -272,9 +268,9 @@ else
 			echo Initializing Waydroid.
  			echo -e "$current_password\n" | sudo -S waydroid init
 			check_waydroid_init
-			
+
 		fi
-	
+
 	# run casualsnek / aleasto waydroid_script
 	echo Install libndk, widevine and fingerprint spoof.
 	install_android_extras
@@ -311,10 +307,10 @@ EOF
 	sleep 3
 	rm -f "$TMP_DESKTOP"
 	echo Waydroid shortcut has been added to Game Mode.
-	
+
 	# create icon for the Waydroid shortcut
 	python3 extras/icon.py
-	
+
 	# add steamos-nested-desktop to Game Mode. This can be used when doing Waydroid maintenance.
 	steamos-add-to-steam /usr/bin/steamos-nested-desktop  &> /dev/null
 	sleep 3
